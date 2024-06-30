@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
@@ -7,7 +6,10 @@ export default function Home() {
       <div className="text-center">
         <h1 className="text-6xl font-bold mb-4">Dating Planner</h1>
         <p className="text-2xl mb-8">AIがあなたの完璧なデートを計画します</p>
-        <Link href="/create-plan" className="bg-white text-pink-500 font-bold py-3 px-6 rounded-full text-xl hover:bg-pink-100 transition duration-300">
+        <Link
+          href="/create-plan"
+          className="bg-white text-pink-500 font-bold py-3 px-6 rounded-full text-xl hover:bg-pink-100 transition duration-300"
+        >
           プランを作成する
         </Link>
       </div>
