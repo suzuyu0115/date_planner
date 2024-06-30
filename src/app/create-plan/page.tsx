@@ -136,7 +136,7 @@ export default function CreatePlan() {
 
           <br />
           <div className="mt-8">
-            <Link href="/plan-result" className="btn btn-primary w-full">
+            <Link href="/result" className="btn btn-primary w-full">
               プランを作成する
             </Link>
           </div>
