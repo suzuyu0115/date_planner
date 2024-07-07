@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     - 日本語で出力してください。
     - 出力は"出力フォーマット"に従ってください。
     - デートプランには、必要に応じてカフェやレストランなどのお店も適切に選定し、提案するようにしてください。
+    - 飲食店のスポットは、食べログページのURLを添付し、掲載がなければ公式サイトのURLを添付するようにしてください。
     - デートスポットでのアクションは可能な限り詳細に明記してください。
     - デートスポットは必要に応じて柔軟に増やしてください。
 
@@ -58,9 +59,7 @@ export async function POST(req: NextRequest) {
 
     const generatedPlan = completion.choices[0].message.content;
 
-    const planId = Date.now().toString();
-
-    return NextResponse.json({ planId, plan: generatedPlan });
+    return NextResponse.json({ plan: generatedPlan });
   } catch (error) {
     console.error('Error generating plan:', error);
     return NextResponse.json({ error: 'プランの作成に失敗しました' }, { status: 500 });

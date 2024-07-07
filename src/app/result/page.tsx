@@ -1,21 +1,29 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 export default function PlanResult() {
-  // この部分は実際のAI出力結果に置き換えられます
-  const aiGeneratedPlan = {
-    title: 'ロマンチックな東京タワーデート',
-    description:
-      '東京タワーを中心とした、思い出に残るロマンチックなデートプランをご提案します。',
-    schedule: [
-      { time: '17:00', activity: '東京タワー展望台で夕景鑑賞' },
-      {
-        time: '19:00',
-        activity: 'タワー直下のレストランで夜景を見ながらディナー',
-      },
-      { time: '21:00', activity: 'イルミネーションが美しい芝公園を散策' },
-    ],
-    tips: '東京タワーのチケットは事前購入がおすすめです。夜は冷えることがあるので、上着をお忘れなく。',
-  };
+  const searchParams = useSearchParams();
+  const [plan, setPlan] = useState<string | null>(null);
+
+  useEffect(() => {
+    const planParam = searchParams.get('plan');
+    if (planParam) {
+      try {
+        const decodedPlan = decodeURIComponent(planParam);
+        setPlan(decodedPlan);
+      } catch (error) {
+        console.error('Error decoding plan:', error);
+        setPlan('プランのデコードに失敗しました。');
+      }
+    }
+  }, [searchParams]);
+
+  if (!plan) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-300 to-purple-400 flex flex-col justify-center items-center p-4">
@@ -43,40 +51,12 @@ export default function PlanResult() {
           あなたのデートプラン
         </h1>
 
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-xl font-semibold text-purple-700 mb-2">
-              {aiGeneratedPlan.title}
-            </h2>
-            <p className="text-gray-600">{aiGeneratedPlan.description}</p>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-purple-700 mb-2">
-              スケジュール
-            </h3>
-            <ul className="space-y-2">
-              {aiGeneratedPlan.schedule.map((item, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="inline-block w-16 font-medium text-pink-600">
-                    {item.time}
-                  </span>
-                  <span>{item.activity}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-purple-700 mb-2">
-              アドバイス
-            </h3>
-            <p className="text-gray-600">{aiGeneratedPlan.tips}</p>
-          </div>
+        <div className="space-y-6 whitespace-pre-wrap text-gray-800 bg-pink-50 p-4 rounded-lg shadow">
+          {plan}
         </div>
 
         <div className="mt-8 flex justify-center">
-          <Link href="/" className="btn btn-primary">
+          <Link href="/create-plan" className="btn btn-primary bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded">
             新しいプランを作成
           </Link>
         </div>

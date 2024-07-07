@@ -30,11 +30,11 @@ export default function CreatePlan() {
 
       if (!response.ok) throw new Error('Failed to generate plan');
 
-      const { planId } = await response.json();
-      router.push(`/result/${planId}`);
+      const { plan } = await response.json();
+
+      router.push(`/result?plan=${encodeURIComponent(plan)}`);
     } catch (error) {
       console.error('Error generating plan:', error);
-      // エラー処理（ユーザーへの通知など）
     }
   };
 
