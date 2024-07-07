@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import anthropic from '@/lib/claude';
+import openai from '@/lib/openai';
 
 export async function POST(req: NextRequest) {
   try {
@@ -49,15 +49,14 @@ export async function POST(req: NextRequest) {
     [デートでのアドバイスや注意事項などを可能な限り詳細に記載]
     `;
 
-    const response = await anthropic.messages.create({
-      model: "claude-3-5-sonnet-20240620",
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "user", content: prompt }],
       max_tokens: 2000,
-      messages: [
-        { role: "human", content: prompt }
-      ]
+      temperature: 0.7,
     });
 
-    const generatedPlan = response.content[0].text;
+    const generatedPlan = completion.choices[0].message.content;
 
     const planId = Date.now().toString();
 
