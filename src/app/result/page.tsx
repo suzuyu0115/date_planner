@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
 
 export default function PlanResult() {
   const searchParams = useSearchParams();
@@ -51,8 +52,21 @@ export default function PlanResult() {
           あなたのデートプラン
         </h1>
 
-        <div className="space-y-6 whitespace-pre-wrap text-gray-800 bg-pink-50 p-4 rounded-lg shadow">
-          {plan}
+        <div className="space-y-6 text-gray-800 bg-pink-50 p-4 rounded-lg shadow">
+          <ReactMarkdown
+            components={{
+              h1: ({node, ...props}) => <h1 className="text-2xl font-bold mb-2" {...props} />,
+              h2: ({node, ...props}) => <h2 className="text-xl font-semibold mb-2" {...props} />,
+              h3: ({node, ...props}) => <h3 className="text-lg font-medium mb-1" {...props} />,
+              p: ({node, ...props}) => <p className="mb-2" {...props} />,
+              ul: ({node, ...props}) => <ul className="list-disc list-inside mb-2" {...props} />,
+              ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-2" {...props} />,
+              li: ({node, ...props}) => <li className="mb-1" {...props} />,
+              a: ({node, ...props}) => <a className="text-blue-600 hover:underline" {...props} />,
+            }}
+          >
+            {plan}
+          </ReactMarkdown>
         </div>
 
         <div className="mt-8 flex justify-center">
