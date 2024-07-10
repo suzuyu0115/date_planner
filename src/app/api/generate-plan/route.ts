@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       - デートスポットは3〜4箇所程度に抑え、無理のないプランにしてください。
       - 予算内で収まるよう、各スポットでの支出を具体的に示してください。
       - 移動時間と滞在時間を現実的に見積もってください。
-      - 時間は開始時刻のみを "HH:MM" 形式で記載してください。
+      - 時間は "HH:MM" 形式で記載してください。
       - 概要とアドバイスは、より詳細かつ具体的に記述してください。最低100文字以上書いてください。
       - 出力は必ず"出力フォーマット"に従い、有効なJSON形式で提供してください。
 
@@ -27,6 +27,9 @@ export async function POST(req: NextRequest) {
 
       ## デートの種類
       ${formData.dateType}
+
+      ## デート時間
+      ${formData.dateType === 'half-day' ? `開始時間: ${formData.startTime}, 終了時間: ${formData.endTime}` : '指定なし'}
 
       ## 予算
       ${formData.budget}
@@ -41,7 +44,7 @@ export async function POST(req: NextRequest) {
         "spots": [
           {
             "name": "スポット名",
-            "time": "開始時刻（HH:MM形式）",
+            "time": "訪問時刻（HH:MM形式）",
             "budget": "ここでの支出",
             "details": "スポットの説明と、ここでの具体的な行動や楽しみ方",
             "mapUrl": "Google Maps URL"
@@ -51,9 +54,11 @@ export async function POST(req: NextRequest) {
         "totalBudget": "各スポットでの支出の合計と、予算内に収まっているかの確認"
       }
 
-      注意: 上記のJSONフォーマットを厳密に守り、有効なJSONのみを出力してください。コードブロックや追加の説明は不要です。
+      注意:
+      - 上記のJSONフォーマットを厳密に守り、有効なJSONのみを出力してください。コードブロックや追加の説明は不要です。
+      - デートの種類が半日デートの場合、指定された開始時間と終了時間内でプランを立ててください。
+      - 各スポットの訪問時刻は、デートの種類と指定された時間範囲内に収まるようにしてください。
     `;
-
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -79,6 +84,16 @@ export async function POST(req: NextRequest) {
       ...spot,
       mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name)}`
     }));
+
+    // 半日デートの場合、時間範囲の検証
+    if (formData.dateType === 'half-day') {
+      const startTime = new Date(`2000-01-01T${formData.startTime}`);
+      const endTime = new Date(`2000-01-01T${formData.endTime}`);
+      generatedPlan.spots = generatedPlan.spots.filter(spot => {
+        const spotTime = new Date(`2000-01-01T${spot.time}`);
+        return spotTime >= startTime && spotTime <= endTime;
+      });
+    }
 
     return NextResponse.json({ plan: JSON.stringify(generatedPlan) });
   } catch (error) {

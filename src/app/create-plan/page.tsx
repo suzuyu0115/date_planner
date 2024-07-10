@@ -9,6 +9,8 @@ export default function CreatePlan() {
   const [formData, setFormData] = useState({
     location: '',
     dateType: 'half-day',
+    startTime: '',
+    endTime: '',
     budget: '',
     preferences: ''
   });
@@ -82,6 +84,33 @@ export default function CreatePlan() {
               <option value="evening">夜デート</option>
             </select>
           </div>
+
+          {formData.dateType === 'half-day' && (
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">デート時間</span>
+              </label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="time"
+                  name="startTime"
+                  value={formData.startTime}
+                  onChange={handleInputChange}
+                  className="input input-bordered flex-1"
+                  required
+                />
+                <span className="text-gray-500">〜</span>
+                <input
+                  type="time"
+                  name="endTime"
+                  value={formData.endTime}
+                  onChange={handleInputChange}
+                  className="input input-bordered flex-1"
+                  required
+                />
+              </div>
+            </div>
+          )}
 
           <div className="form-control">
             <label className="label">
