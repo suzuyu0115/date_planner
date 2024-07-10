@@ -69,13 +69,16 @@ export async function POST(req: NextRequest) {
 
     let responseContent = completion.choices[0].message.content;
 
-    // JSONの開始と終了を探して抽出
-    const jsonStart = responseContent.indexOf('{');
-    const jsonEnd = responseContent.lastIndexOf('}') + 1;
-    if (jsonStart === -1 || jsonEnd === 0) {
-      throw new Error('Valid JSON not found in the response');
+    if (responseContent) {
+      const jsonStart = responseContent.indexOf('{');
+      const jsonEnd = responseContent.lastIndexOf('}') + 1;
+      if (jsonStart === -1 || jsonEnd === 0) {
+        throw new Error('Valid JSON not found in the response');
+      }
+      responseContent = responseContent.slice(jsonStart, jsonEnd);
+    } else {
+      throw new Error('No response content received from OpenAI');
     }
-    responseContent = responseContent.slice(jsonStart, jsonEnd);
 
     const generatedPlan = JSON.parse(responseContent);
 
