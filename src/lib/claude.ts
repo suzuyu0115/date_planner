@@ -3,7 +3,7 @@ import Anthropic from 'anthropic';
 const apiKey = process.env.ANTHROPIC_API_KEY;
 
 if (!apiKey) {
-  throw new Error("Anthropic API Keyがありません");
+  throw new Error('Anthropic API Keyがありません');
 }
 
 // Anthropic クライアントの初期化

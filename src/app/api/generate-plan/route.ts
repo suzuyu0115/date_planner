@@ -61,8 +61,8 @@ export async function POST(req: NextRequest) {
     `;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: prompt }],
+      model: 'gpt-4o',
+      messages: [{ role: 'user', content: prompt }],
       max_tokens: 2000,
       temperature: 0.7,
     });
@@ -77,19 +77,19 @@ export async function POST(req: NextRequest) {
     }
     responseContent = responseContent.slice(jsonStart, jsonEnd);
 
-    let generatedPlan = JSON.parse(responseContent);
+    const generatedPlan = JSON.parse(responseContent);
 
     // Google Maps URLの形式を検証し、必要に応じて修正
-    generatedPlan.spots = generatedPlan.spots.map(spot => ({
+    generatedPlan.spots = generatedPlan.spots.map((spot) => ({
       ...spot,
-      mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name)}`
+      mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name)}`,
     }));
 
     // 半日デートの場合、時間範囲の検証
     if (formData.dateType === 'half-day') {
       const startTime = new Date(`2000-01-01T${formData.startTime}`);
       const endTime = new Date(`2000-01-01T${formData.endTime}`);
-      generatedPlan.spots = generatedPlan.spots.filter(spot => {
+      generatedPlan.spots = generatedPlan.spots.filter((spot) => {
         const spotTime = new Date(`2000-01-01T${spot.time}`);
         return spotTime >= startTime && spotTime <= endTime;
       });
@@ -98,6 +98,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ plan: JSON.stringify(generatedPlan) });
   } catch (error) {
     console.error('Error generating plan:', error);
-    return NextResponse.json({ error: 'プランの作成に失敗しました。もう一度お試しください。' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'プランの作成に失敗しました。もう一度お試しください。' },
+      { status: 500 }
+    );
   }
 }
