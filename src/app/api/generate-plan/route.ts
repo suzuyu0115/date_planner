@@ -1,6 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import openai from '@/lib/openai';
 
+interface Spot {
+  name: string;
+  time: string;
+  budget: string;
+  details: string;
+  mapUrl: string;
+}
+
+interface GeneratedPlan {
+  title: string;
+  overview: string;
+  spots: Spot[];
+  advice: string;
+  totalBudget: string;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.json();
@@ -80,10 +96,10 @@ export async function POST(req: NextRequest) {
       throw new Error('No response content received from OpenAI');
     }
 
-    const generatedPlan = JSON.parse(responseContent);
+    const generatedPlan = JSON.parse(responseContent) as GeneratedPlan;
 
     // Google Maps URLの形式を検証し、必要に応じて修正
-    generatedPlan.spots = generatedPlan.spots.map((spot) => ({
+    generatedPlan.spots = generatedPlan.spots.map((spot: Spot) => ({
       ...spot,
       mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name)}`,
     }));
