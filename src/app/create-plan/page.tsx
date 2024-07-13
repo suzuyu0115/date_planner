@@ -14,6 +14,7 @@ export default function CreatePlan() {
     budget: '',
     preferences: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -26,6 +27,7 @@ export default function CreatePlan() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch('/api/generate-plan', {
@@ -41,6 +43,7 @@ export default function CreatePlan() {
       router.push(`/result?plan=${encodeURIComponent(plan)}`);
     } catch (error) {
       console.error('Error generating plan:', error);
+      setIsLoading(false);
     }
   };
 
@@ -160,12 +163,25 @@ export default function CreatePlan() {
           </div>
 
           <div className="mt-6">
-            <button type="submit" className="btn btn-primary w-full">
-              プランを作成
+            <button
+              type="submit"
+              className="btn btn-primary w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? '作成中...' : 'プランを作成'}
             </button>
           </div>
         </form>
       </div>
+      {isLoading && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="text-center text-white">
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-white border-solid mb-4"></div>
+            <p className="text-2xl font-semibold">プランを作成中...</p>
+            <p className="text-lg mt-2">しばらくお待ちください</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
