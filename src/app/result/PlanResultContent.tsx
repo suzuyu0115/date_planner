@@ -42,14 +42,14 @@ export default function PlanResultContent() {
     return null;
   }
 
-  const sharePlan = () => {
-    const text = `${plan.title}\n${plan.overview}\n#デートプラン`;
-    const url = window.location.href;
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
-      '_blank'
-    );
-  };
+  // const sharePlan = () => {
+  //   const text = `${plan.title}\n${plan.overview}\n#デートプラン`;
+  //   const url = window.location.href;
+  //   window.open(
+  //     `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+  //     '_blank'
+  //   );
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-300 to-purple-400 py-8">
