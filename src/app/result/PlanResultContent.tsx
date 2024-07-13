@@ -138,7 +138,7 @@ export default function PlanResultContent() {
             <p>{plan.totalBudget}</p>
           </div>
 
-          <div className="text-center">
+          {/* <div className="text-center">
             <button
               onClick={sharePlan}
               className="bg-white text-pink-500 font-bold py-2 px-6 rounded-full text-lg hover:bg-pink-100 transition duration-300 shadow"
@@ -155,7 +155,7 @@ export default function PlanResultContent() {
               </svg>
               プランをシェア
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
