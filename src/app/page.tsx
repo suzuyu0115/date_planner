@@ -24,11 +24,13 @@ export default function Home() {
           <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
             プランを作成する
           </span>
-          <span className="
+          <span
+            className="
             absolute inset-0 bg-gradient-to-r from-pink-400 to-purple-500
             transform scale-x-0 group-hover:scale-x-100 group-active:scale-x-95
             transition-transform duration-300 ease-out origin-left
-          "></span>
+          "
+          ></span>
         </Link>
       </div>
       <footer className="mt-16 text-sm opacity-75">
