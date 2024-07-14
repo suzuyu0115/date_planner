@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { savePlan } from '@/utils/planStorage';
 
 export default function CreatePlan() {
   const router = useRouter();
@@ -40,7 +41,9 @@ export default function CreatePlan() {
 
       const { plan } = await response.json();
 
-      router.push(`/result?plan=${encodeURIComponent(plan)}`);
+      const shortId = savePlan(plan);
+
+      router.push(`/result/${shortId}`);
     } catch (error) {
       console.error('Error generating plan:', error);
       setIsLoading(false);

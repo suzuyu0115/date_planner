@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
+import { getPlan } from '@/utils/planStorage';
 
 interface PlanSpot {
   name: string;
@@ -21,22 +21,21 @@ interface DatePlan {
   totalBudget: string;
 }
 
-export default function PlanResultContent() {
-  const searchParams = useSearchParams();
+export default function PlanResultContent({ id }: { id: string }) {
   const [plan, setPlan] = useState<DatePlan | null>(null);
 
   useEffect(() => {
-    const planParam = searchParams.get('plan');
-    if (planParam) {
+    const planData = getPlan(id);
+    if (planData) {
       try {
-        const decodedPlan = JSON.parse(decodeURIComponent(planParam));
+        const decodedPlan = JSON.parse(planData);
         setPlan(decodedPlan);
       } catch (error) {
-        console.error('Error decoding plan:', error);
+        console.error('Error parsing plan data:', error);
         setPlan(null);
       }
     }
-  }, [searchParams]);
+  }, [id]);
 
   if (!plan) {
     return null;
