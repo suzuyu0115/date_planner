@@ -16,6 +16,7 @@ export default function CreatePlan() {
     preferences: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -29,6 +30,7 @@ export default function CreatePlan() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
 
     try {
       const response = await fetch('/api/generate-plan', {
@@ -37,15 +39,17 @@ export default function CreatePlan() {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error('Failed to generate plan');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const { plan } = await response.json();
-
       const shortId = savePlan(plan);
-
       router.push(`/result/${shortId}`);
     } catch (error) {
       console.error('Error generating plan:', error);
+      setError('プランの作成中にエラーが発生しました。もう一度お試しください。');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -166,6 +170,13 @@ export default function CreatePlan() {
           </div>
 
           <div className="mt-6">
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4" role="alert">
+                <strong className="font-bold">エラー:</strong>
+                <span className="block sm:inline"> {error}</span>
+              </div>
+            )}
+            <br></br>
             <button
               type="submit"
               className="btn btn-primary w-full"
