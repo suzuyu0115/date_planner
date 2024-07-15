@@ -47,9 +47,11 @@ export default function PlanResultContent({ id }: { id: string }) {
   }, [id]);
 
   if (isLoading) {
-    return <div className="min-h-screen bg-gradient-to-br from-pink-300 to-purple-400 flex items-center justify-center">
-      <div className="text-white text-2xl">Loading...</div>
-    </div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-300 to-purple-400 flex items-center justify-center">
+        <div className="text-white text-2xl">Loading...</div>
+      </div>
+    );
   }
 
   if (!plan) {
