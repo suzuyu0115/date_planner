@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import { getPlan } from '@/utils/planStorage';
+import { notFound } from 'next/navigation';
 
 interface PlanSpot {
   name: string;
@@ -23,18 +24,26 @@ interface DatePlan {
 
 export default function PlanResultContent({ id }: { id: string }) {
   const [plan, setPlan] = useState<DatePlan | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const planData = getPlan(id);
-    if (planData) {
-      try {
-        const decodedPlan = JSON.parse(planData);
-        setPlan(decodedPlan);
-      } catch (error) {
-        console.error('Error parsing plan data:', error);
-        setPlan(null);
+    const fetchPlan = () => {
+      const planData = getPlan(id);
+      if (planData) {
+        try {
+          const decodedPlan = JSON.parse(planData);
+          setPlan(decodedPlan);
+        } catch (error) {
+          console.error('Error parsing plan data:', error);
+          notFound();
+        }
+      } else {
+        notFound();
       }
-    }
+      setIsLoading(false);
+    };
+
+    fetchPlan();
   }, [id]);
 
   if (!plan) {
