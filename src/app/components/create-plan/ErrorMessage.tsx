@@ -1,6 +1,4 @@
-interface ErrorProps {
-  error: string | null;
-}
+import { ErrorProps } from '@/types';
 
 export const ErrorMessage = ({ error }: ErrorProps) => (
   error && (

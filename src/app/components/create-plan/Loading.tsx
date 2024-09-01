@@ -1,6 +1,4 @@
-interface LoadingProps {
-  isLoading: boolean;
-}
+import { LoadingProps } from '@/types'
 
 export const Loading = ({ isLoading }: LoadingProps) => (
   isLoading && (
