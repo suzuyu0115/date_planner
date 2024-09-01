@@ -1,26 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
-import { getPlan } from '@/utils/planStorage';
+
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
-interface PlanSpot {
-  name: string;
-  time: string;
-  budget: string;
-  details: string;
-  mapUrl: string;
-}
-
-interface DatePlan {
-  title: string;
-  overview: string;
-  spots: PlanSpot[];
-  advice: string;
-  totalBudget: string;
-}
+import { getPlan } from '@/utils/planStorage';
+import { DatePlan } from '@/types';
 
 export default function PlanResultContent({ id }: { id: string }) {
   const [plan, setPlan] = useState<DatePlan | null>(null);

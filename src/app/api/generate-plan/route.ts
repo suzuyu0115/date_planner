@@ -1,21 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import openai from '@/lib/openai';
+import { Spot, GeneratedPlan } from '@/types';
 
-interface Spot {
-  name: string;
-  time: string;
-  budget: string;
-  details: string;
-  mapUrl: string;
-}
-
-interface GeneratedPlan {
-  title: string;
-  overview: string;
-  spots: Spot[];
-  advice: string;
-  totalBudget: string;
-}
 
 export async function POST(req: NextRequest) {
   try {

@@ -3,7 +3,10 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+
 import { savePlan } from '@/utils/planStorage';
+import { Loading } from '../components/create-plan/Loading';
+import { ErrorMessage } from '../components/create-plan/ErrorMessage';
 
 export default function CreatePlan() {
   const router = useRouter();
@@ -172,15 +175,7 @@ export default function CreatePlan() {
           </div>
 
           <div className="mt-6">
-            {error && (
-              <div
-                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4"
-                role="alert"
-              >
-                <strong className="font-bold">エラー:</strong>
-                <span className="block sm:inline"> {error}</span>
-              </div>
-            )}
+            <ErrorMessage error={error} />
             <br></br>
             <button
               type="submit"
@@ -192,15 +187,7 @@ export default function CreatePlan() {
           </div>
         </form>
       </div>
-      {isLoading && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="text-center text-white">
-            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-white border-solid mb-4"></div>
-            <p className="text-2xl font-semibold">プランを作成中...</p>
-            <p className="text-lg mt-2">しばらくお待ちください</p>
-          </div>
-        </div>
-      )}
+      <Loading isLoading={isLoading} />
     </div>
   );
 }
